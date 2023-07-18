@@ -1,39 +1,82 @@
 function getNeighbors(row, col, matrix) {
-  
-  // Check top
-  // Check top right
-  // Check right
-  // Check bottom right
-  // Check bottom
-  // Check bottom left
-  // Check left
-  // Check top left
-  // Return neighbors
-  
-  // Your code here
+  let startNode = [row, col];
+  let rows = [row, row + 1, row - 1];
+  let cols = [col, col + 1, col - 1];
+  let neighbors = [];
+
+  rows.forEach(r => {
+    cols.forEach(c => {
+      let currNode = [r, c];
+
+      if (String(currNode) !== String(startNode) &&
+        isInsideTheMatrix(r, c, matrix) &&
+        hasValueOfOne(r, c, matrix)) {
+        neighbors.push(currNode);
+      }
+    });
+  });
+
+  return neighbors;
 }
 
+/**
+ * 1) create queue of nodes, enqueu 0,0
+ * 2) create set of visited nodes
+ * 3) While queue is not empty
+ * 4)   pop first node off of queue
+ * 5)   if not yet visisted
+ *        a) add to visited
+ *        b) DO THE THING
+ *        c) add all neighbors to queue
+ */
+
 function countIslands(matrix) {
-  
-  // Create a visited set to store visited nodes
-  // Initialize count to 0
-  // Iterate through all indices in matrix
-    // If an index contains a 1 and has not been visited, 
-    // increment island count and start traversing neighbors
-      // DO THE THING (increment island count by 1)
-      // Initialize a stack with current index
-      // Add stringified version of current index to the visited set
-      // While stack contains elements
-        // Pop element from stack
-        // Get valid neighbors of current element
-        // Iterate over neigbors
-          // If neighbor has not been visited
-            // Add neighbor to stack
-            // Mark neighbor as visited
-  // Return island count
-  
-  // Your code here
+  let islandCount = 0;
+  let visited = new Set();
+
+  // iterate over all spots in the matrix
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[0].length; col++) {
+      let startNode = [row, col];
+
+      // if a 1 is found that hasn't been visited yet,
+      // increment 'islandsCount' and start traversing over neighbors
+      if (matrix[row][col] === 1 && !visited.has(String(startNode))) {
+        islandCount++;
+        let stack = [startNode];
+        visited.add(String(startNode));
+
+        while (stack.length > 0) {
+          let node = stack.pop();
+          let [row, col] = node;
+          let neighbors = getNeighbors(row, col, matrix);
+
+          neighbors.forEach(neighbor => {
+            if (!visited.has(String(neighbor))) {
+              stack.push(neighbor);
+              visited.add(String(neighbor));
+            }
+          });
+        }
+      }
+    }
+  }
+  return islandCount;
 }
+
+/*************
+ * HELPERS
+ ************
+ */
+function isInsideTheMatrix(row, col, matrix) {
+  return (row >= 0 && col >= 0 && row < matrix.length && col < matrix[0].length);
+}
+
+function hasValueOfOne(row, col, matrix) {
+  if (isInsideTheMatrix(row, col, matrix)) return matrix[row][col] === 1;
+  else return false;
+}
+
 
 // Uncomment the lines below for local testing
 // const matrix = [
