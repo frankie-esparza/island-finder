@@ -20,11 +20,11 @@ function getNeighbors(row, col, matrix) {
 }
 
 /**
- * 1) create queue of nodes, enqueu 0,0
+ * 1) create queue of nodes, enqueue 0,0
  * 2) create set of visited nodes
  * 3) While queue is not empty
  * 4)   pop first node off of queue
- * 5)   if not yet visisted
+ * 5)   if not yet visited
  *        a) add to visited
  *        b) DO THE THING
  *        c) add all neighbors to queue
